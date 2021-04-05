@@ -1,7 +1,321 @@
-﻿
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    Layout = null;
 }
 
-<h2>Index</h2>
+<!DOCTYPE html>
 
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <!-- CSS only -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.css" />
+
+    <title>Index</title>
+</head>
+<body>
+    <!-- Button trigger modal -->
+    <button onclick="AbrirModal(0)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Agregar
+    </button>
+
+    <div class="form-group">
+        <label>Ingrese nombre del medicamento</label>
+        <input onkeyup="FiltrarDatos()" type="text" id="txtBuscarNombreMedicamento" class="form-control" />
+    </div>
+    <div id="divTabla">
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lblTitulo"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Id Medicamento</label>
+                        <input type="text" class="form-control Limpiar" id="txtIdMedicamento" readonly />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input name="Nombre" type="text" class="form-control Limpiar Obligatorio" id="txtNombre" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Concentracíon</label>
+                        <input name="Concentracion" type="text" class="form-control Limpiar Obligatorio" id="txtConcentracion" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Forma Farmaceutica</label>
+                        <select name="forma Farmaceutica" id="cboFormaFarmaceutica" class="form-control Limpiar Obligatorio"></select>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Precio</label>
+                        <input name="Precio" type="number" class="form-control Limpiar Obligatorio" id="txtPrecio" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Stock</label>
+                        <input name="Stock" type="number" class="form-control Limpiar Obligatorio" id="txtStock" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Presentacion</label>
+                        <input name="Presentacion" type="text" class="form-control Limpiar Obligatorio" id="txtPresentacion" />
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="Guardar()" class="btn btn-primary">Guardar</button>
+                    <button type="button" id="btnCerrar" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+
+                </div>
+                <div id="divError">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Bundle with Popper -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.js"></script>
+    <script>
+        window.onload = function () {
+            ListarMedicamentos();
+            ListarFormaFarmaceutica();
+        }
+
+        function ListarFormaFarmaceutica() {
+            fetch("Medicamento/ListarFormaFarmaceutica")
+                .then(res => res.json())
+                .then(res => {
+                    //
+                    //
+                    LlenarCombo(res);
+                })
+        }
+        function FiltrarDatos() {
+            var NombreMedicamento = document.getElementById("txtBuscarNombreMedicamento").value;
+            if (NombreMedicamento != "") {
+                fetch("Medicamento/BuscarMedicamentosPorNombre/?NombreMedicamento=" + NombreMedicamento)
+                    .then(res => res.json())
+                    .then(res => {
+                        Listar(res);
+                    })
+            } else {
+                ListarMedicamentos();
+            }
+
+        }
+        function LlenarCombo(res) {
+            var contenido = "";
+            contenido += "<option value=''>--Seleccione--</option>";
+            for (var i = 0; i < res.length; i++) {
+                contenido += "<option value='" + res[i].IidFormaFarmaceutica + "'>" + res[i].NombreFormaFarmaceutica + "</option>";
+            }
+            document.getElementById("cboFormaFarmaceutica").innerHTML = contenido;
+
+
+        }
+        function ListarMedicamentos() {
+            fetch("Medicamento/ListarMedicamentos")
+                .then(res => res.json())
+                .then(res => {
+
+                    Listar(res);
+                })
+        }
+
+        function Limpiar() {
+            var limpiar = document.getElementsByClassName("Limpiar");
+            var nlimpiar = limpiar.length;
+
+            for (var i = 0; i < nlimpiar; i++) {
+                limpiar[i].value = "";
+            }
+
+        }
+
+        function Listar(res) {
+            var contenido = "";
+
+            contenido += "<table id='table' class='table'>";
+            contenido += "<thead class='table-dark'>";
+            //Definimos las filas(definimos la primera fila)
+            contenido += "<tr>";
+            contenido += "<th>Id Medicamento</th>"
+            contenido += "<th>Nombre</th>"
+            contenido += "<th>Concentracion</th>"
+            contenido += "<th>Forma</th>"
+            contenido += "<th>Stock</th>"
+            contenido += "<th>Precio</th>"
+            contenido += "<th>Presentacion</th>"
+            contenido += "<th>Operaciones</th>"
+            contenido += "</tr>";
+
+            contenido += "</thead>";
+
+            contenido += "<tbody>";
+
+            for (var i = 0; i < res.length; i++) {
+                var item = res[i];
+
+                contenido += "<tr>";
+
+                contenido += "<td>" + item.IidMedicamento + "</td>";
+                contenido += "<td>" + item.Nombre + "</td>";
+                contenido += "<td>" + item.Concentracion + "</td>";
+                contenido += "<td>" + item.NombreFormaFarmaceutica + "</td>";
+                contenido += "<td>" + item.Stock + "</td>";
+                contenido += "<td>" + item.Precio + "</td>";
+                contenido += "<td>" + item.Presentacion + "</td>";
+                contenido += "<td><input type='button' class='btn btn-primary' onclick='AbrirModal(" + item.IidMedicamento + ")' value='Editar' data-toggle='modal' data-target='#exampleModal'/>";
+                contenido += "<input type='button'onclick='Eliminar(" + item.IidMedicamento + ")' class='btn btn-danger' value='Eliminar'/></td>";
+                contenido += "</tr>";
+
+            }
+            contenido += "</tbody>";
+
+            contenido += "</table>";
+
+            document.getElementById("divTabla").innerHTML = contenido;
+            $('#table').DataTable();
+        }
+
+        function Eliminar(iidmedicamento) {
+            if (confirm("¿Eliminar?") == 1) {
+                fetch("Medicamento/EliminarMedicamento/?iidMedicamento=" + iidmedicamento)
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res == 1) {
+                            ListarMedicamentos();
+                            alert("Eliminado");
+                        } else {
+                            aler("Error");
+                        }
+                    })
+            }
+
+        }
+
+        function AbrirModal(iidMedicamento) {
+            Limpiar();
+            if (iidMedicamento == 0) {
+                document.getElementById("lblTitulo").innerHTML = "Agregar Medicamento";
+            } else {
+                document.getElementById("lblTitulo").innerHTML = "Editar Medicamento";
+
+                fetch("Medicamento/RecuperarMedicamento/?iidMedicamento=" + iidMedicamento)
+                    .then(res => res.json())
+                    .then(res => {
+                        document.getElementById("txtIdMedicamento").value = res.IidMedicamento;
+                        document.getElementById("txtNombre").value = res.Nombre;
+                        document.getElementById("txtConcentracion").value = res.Concentracion;
+                        document.getElementById("cboFormaFarmaceutica").value = res.IidFormaFarmaceutica;
+                        document.getElementById("txtPrecio").value = res.Precio;
+                        document.getElementById("txtStock").value = res.Stock;
+                        document.getElementById("txtPresentacion").value = res.Presentacion;
+                    })
+            }
+
+        }
+
+        function DatosObligatorios() {
+            var exito = true;
+            var contenido = "<ol style='color:red'>";
+            var controlesObligatorios = document.getElementsByClassName("Obligatorio");
+            var ncontroles = controlesObligatorios.length;
+            for (var i = 0; i < ncontroles; i++) {
+                if (controlesObligatorios[i].value == "") {
+
+                    exito = false;
+                    contenido += "<li>" + controlesObligatorios[i].name + "Es obligatorio</li>"
+
+                }
+
+            }
+            contenido += "</ol>";
+            return { exito, contenido };
+        }
+
+        function Guardar() {
+            if (confirm("Deseas guardr los cambios?") == 1) {
+                var objeto = DatosObligatorios();
+                if (objeto.exito == false) {
+                    document.getElementById("divError").innerHTML = objeto.contenido;
+                    return;
+                } else {
+                    document.getElementById("divError").innerHTML = "";
+                }
+
+                //Capturar los valores
+                var IidMedicamento = document.getElementById("txtIdMedicamento").value;
+                var Nombre = document.getElementById("txtNombre").value;
+                var Concentracion = document.getElementById("txtConcentracion").value;
+                var IidFormaFarmaceutica = document.getElementById("cboFormaFarmaceutica").value;
+                var Precio = document.getElementById("txtPrecio").value;
+                var Stock = document.getElementById("txtStock").value;
+                var Presentacion = document.getElementById("txtPresentacion").value;
+                //Llamada al controller
+
+                var ObjetoEnviar = {
+                    IidMedicamento,
+                    Nombre,
+                    Concentracion,
+                    IidFormaFarmaceutica,
+                    Precio,
+                    Stock,
+                    Presentacion
+
+
+                };
+
+                fetch("Medicamento/AgregarYEditarMedicamento", {
+
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(ObjetoEnviar)
+                }).then(res => res.json())
+                    .then(res => {
+                        if (res == 1) {
+                            ListarMedicamentos();
+                            document.getElementById("btnCerrar").click();
+                            alert("Se guardo");
+                        } else {
+                            aler("Ocurrio error");
+                        }
+
+                    })
+
+            }
+        }
+
+    </script>
+</body>
+</html>
