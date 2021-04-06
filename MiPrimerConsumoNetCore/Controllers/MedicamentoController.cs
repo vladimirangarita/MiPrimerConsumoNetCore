@@ -30,7 +30,7 @@ namespace MiPrimerConsumoNetCore.Controllers
                     p.Presentacion
                 }
 
-                ).ToList();
+                );
             return Json(ListaMedicamento);
         }
 

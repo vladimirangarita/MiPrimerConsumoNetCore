@@ -315,7 +315,7 @@ namespace ServiceMedicamento
         {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IMedicamentos))
             {
-                return new System.ServiceModel.EndpointAddress("http://192.168.250.6:8081/Medicamentos.svc");
+                return new System.ServiceModel.EndpointAddress("http://192.168.250.14:8081/Medicamentos.svc");
             }
             throw new System.InvalidOperationException(string.Format("No se pudo encontrar un punto de conexión con el nombre \"{0}\".", endpointConfiguration));
         }

@@ -116,7 +116,7 @@
                     //
                     //
                     LlenarCombo(res);
-                })
+                });
         }
         function FiltrarDatos() {
             var NombreMedicamento = document.getElementById("txtBuscarNombreMedicamento").value;
@@ -147,7 +147,7 @@
                 .then(res => {
 
                     Listar(res);
-                })
+                });
         }
 
         function Limpiar() {
@@ -167,22 +167,28 @@
             contenido += "<thead class='table-dark'>";
             //Definimos las filas(definimos la primera fila)
             contenido += "<tr>";
-            contenido += "<th>Id Medicamento</th>"
-            contenido += "<th>Nombre</th>"
-            contenido += "<th>Concentracion</th>"
-            contenido += "<th>Forma</th>"
-            contenido += "<th>Stock</th>"
-            contenido += "<th>Precio</th>"
-            contenido += "<th>Presentacion</th>"
-            contenido += "<th>Operaciones</th>"
+            contenido += "<th>Id Medicamento</th>";
+            contenido += "<th>Nombre</th>";
+            contenido += "<th>Concentracion</th>";
+            contenido += "<th>Forma</th>";
+            contenido += "<th>Stock</th>";
+            contenido += "<th>Precio</th>";
+            contenido += "<th>Presentacion</th>";
+            contenido += "<th>Operaciones</th>";
             contenido += "</tr>";
 
             contenido += "</thead>";
 
             contenido += "<tbody>";
 
+
+            alert(JSON.stringify(res));
+
             for (var i = 0; i < res.length; i++) {
+
                 var item = res[i];
+
+                alert("Codigo:  " + item.IidMedicamento);
 
                 contenido += "<tr>";
 
