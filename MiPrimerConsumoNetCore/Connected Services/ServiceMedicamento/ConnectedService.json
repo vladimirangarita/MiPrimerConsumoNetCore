@@ -5,7 +5,7 @@
     "Uri": "https://go.microsoft.com/fwlink/?linkid=858517"
   },
   "ExtendedData": {
-    "Uri": "http://192.168.250.14:8081/Medicamentos.svc?wsdl",
+    "Uri": "http://192.168.250.8/Medicamentos.svc?wsdl",
     "Namespace": "ServiceMedicamento",
     "SelectedAccessLevelForGeneratedClass": "Public",
     "GenerateMessageContract": false,

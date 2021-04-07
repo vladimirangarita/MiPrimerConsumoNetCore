@@ -135,7 +135,7 @@
             var contenido = "";
             contenido += "<option value=''>--Seleccione--</option>";
             for (var i = 0; i < res.length; i++) {
-                contenido += "<option value='" + res[i].IidFormaFarmaceutica + "'>" + res[i].NombreFormaFarmaceutica + "</option>";
+                contenido += "<option value='" + res[i].iidFormaFarmaceutica + "'>" + res[i].nombreFormaFarmaceutica + "</option>";
             }
             document.getElementById("cboFormaFarmaceutica").innerHTML = contenido;
 
@@ -182,25 +182,25 @@
             contenido += "<tbody>";
 
 
-            alert(JSON.stringify(res));
+            //alert(JSON.stringify(res));
 
             for (var i = 0; i < res.length; i++) {
 
                 var item = res[i];
 
-                alert("Codigo:  " + item.IidMedicamento);
+                //alert("Codigo:  " + item.iidMedicamento);
 
                 contenido += "<tr>";
 
-                contenido += "<td>" + item.IidMedicamento + "</td>";
-                contenido += "<td>" + item.Nombre + "</td>";
-                contenido += "<td>" + item.Concentracion + "</td>";
-                contenido += "<td>" + item.NombreFormaFarmaceutica + "</td>";
-                contenido += "<td>" + item.Stock + "</td>";
-                contenido += "<td>" + item.Precio + "</td>";
-                contenido += "<td>" + item.Presentacion + "</td>";
-                contenido += "<td><input type='button' class='btn btn-primary' onclick='AbrirModal(" + item.IidMedicamento + ")' value='Editar' data-toggle='modal' data-target='#exampleModal'/>";
-                contenido += "<input type='button'onclick='Eliminar(" + item.IidMedicamento + ")' class='btn btn-danger' value='Eliminar'/></td>";
+                contenido += "<td>" + item.iidMedicamento + "</td>";
+                contenido += "<td>" + item.nombre + "</td>";
+                contenido += "<td>" + item.concentracion + "</td>";
+                contenido += "<td>" + item.nombreFormaFarmaceutica + "</td>";
+                contenido += "<td>" + item.stock + "</td>";
+                contenido += "<td>" + item.precio + "</td>";
+                contenido += "<td>" + item.presentacion + "</td>";
+                contenido += "<td><input type='button' class='btn btn-primary' onclick='AbrirModal(" + item.iidMedicamento + ")' value='Editar' data-toggle='modal' data-target='#exampleModal'/>";
+                contenido += "<input type='button'onclick='Eliminar(" + item.iidMedicamento + ")' class='btn btn-danger' value='Eliminar'/></td>";
                 contenido += "</tr>";
 
             }
@@ -238,13 +238,13 @@
                 fetch("Medicamento/RecuperarMedicamento/?iidMedicamento=" + iidMedicamento)
                     .then(res => res.json())
                     .then(res => {
-                        document.getElementById("txtIdMedicamento").value = res.IidMedicamento;
-                        document.getElementById("txtNombre").value = res.Nombre;
-                        document.getElementById("txtConcentracion").value = res.Concentracion;
-                        document.getElementById("cboFormaFarmaceutica").value = res.IidFormaFarmaceutica;
-                        document.getElementById("txtPrecio").value = res.Precio;
-                        document.getElementById("txtStock").value = res.Stock;
-                        document.getElementById("txtPresentacion").value = res.Presentacion;
+                        document.getElementById("txtIdMedicamento").value = res.iidMedicamento;
+                        document.getElementById("txtNombre").value = res.nombre;
+                        document.getElementById("txtConcentracion").value = res.concentracion;
+                        document.getElementById("cboFormaFarmaceutica").value = res.iidFormaFarmaceutica;
+                        document.getElementById("txtPrecio").value = res.precio;
+                        document.getElementById("txtStock").value = res.stock;
+                        document.getElementById("txtPresentacion").value = res.presentacion;
                     })
             }
 
